@@ -8,11 +8,6 @@ info:
     name: Jared Henry
     url: henrynetworks.com
     email: jhenry6@gmail.com
-servers:
-  - url: 'http://localhost:8080'
-    description: Localserver
-  - url: 'https://cola.henrynetworks.com'
-    description: Dev
 paths:
   /auth/login:
     post:

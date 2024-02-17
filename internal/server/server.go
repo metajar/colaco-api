@@ -175,9 +175,6 @@ func (v *VendingMachine) Run() {
 		}
 		return c.HTMLBlob(http.StatusOK, htmlContent)
 	})
-	e.GET("/vending", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Vending endpoint hit directly")
-	})
 	v1.RegisterHandlers(e, v)
 	e.Logger.Fatal(e.Start(net.JoinHostPort("0.0.0.0", v.port)))
 }
