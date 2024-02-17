@@ -10,4 +10,14 @@ gen:
 clean:
 	rm $(OUTPUT)
 
+docker:
+	docker build -t cola .
+
+run:
+	docker run -p 8080:8080 cola
+
+cli:
+	go build -o cola-client ./cmd/client
+
+
 .PHONY: generate
