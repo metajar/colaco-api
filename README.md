@@ -1,8 +1,8 @@
 # ColaCo-API
 
-### This is temporarily hosted at http://cola.henrynetworks.com
+### This is temporarily hosted at https://cola.henrynetworks.com
 
-### Docs are http://cola.henrynetworks.com/docs
+### Docs are https://cola.henrynetworks.com/docs
 
 ## Overview
 Welcome to the ColaCo-API, a versatile and secure API framework designed to manage vending machine operations. This project uses Go, Docker for deployment, JWT for secure authentication, and offers an interactive API documentation via ReDoc. It's built to be extensible, allowing for easy integration of various storage backends and customization of its authentication mechanisms.
