@@ -17,9 +17,11 @@ import (
 // username and/or password
 func (v *VendingMachine) AuthLogin(ctx echo.Context) error {
 	var loginReq v1.AuthRequestBody
+
 	if err := ctx.Bind(&loginReq); err != nil {
 		return ctx.JSON(http.StatusBadRequest, genErrorResponse("Invalid request"))
 	}
+
 	if !authenticateUser(loginReq.Username, loginReq.Password) {
 		return ctx.JSON(http.StatusUnauthorized, genErrorResponse("Invalid username and/or password"))
 	}
