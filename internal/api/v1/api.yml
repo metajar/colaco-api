@@ -1,0 +1,378 @@
+openapi: 3.0.0
+info:
+  title: Virtual Soda Vending Machine API
+  description: |
+    The Virtual Soda Vending Machine API provides a simulated environment for managing and interacting with a virtual soda vending machine. It supports operations such as user authentication, purchasing sodas, restocking inventory, and updating soda prices. This API is designed for use by developers, machine administrators, and end-users looking to explore the functionalities of a virtual vending machine, including inventory management and customer transactions. Get started with our API to enhance your vending machine operations with dynamic pricing, inventory control, and secure user authentication.
+  version: 1.0.0
+  contact:
+    name: Jared Henry
+    url: henrynetworks.com
+    email: jhenry6@gmail.com
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /auth/login:
+    post:
+      summary: Authenticate user and issue JWT
+      operationId: authLogin
+      responses:
+        '200':
+          $ref: '#/components/responses/AuthTokenResponse'
+        '401':
+          $ref: '#/components/responses/MessageResponse'
+      description: |
+        This endpoint authenticates users via their username and password. Upon successful authentication, it issues a JWT, which must be used as a Bearer Token in subsequent API requests. This token ensures secure access to the vending machine's functionalities. The JWT has an expiry time, after which re-authentication is necessary. Ensure that your credentials are securely stored and not exposed in client-side code. If authentication fails, a 401 error is returned, indicating incorrect credentials or an account issue.
+      requestBody:
+        $ref: '#/components/requestBodies/AuthRequestBody'
+      tags:
+        - authentication
+  /purchase:
+    post:
+      summary: Purchase Soda from vending machine
+      operationId: post-purchase
+      responses:
+        '200':
+          $ref: '#/components/responses/PurchaseSodaResponse'
+        '402':
+          $ref: '#/components/responses/MessageResponse'
+      description: |
+        Allows users to purchase their chosen soda by providing the soda's name and their payment amount. The payment is processed, and if successful, the selected soda is dispensed. If the payment exceeds the soda's cost, the change is returned in the response. In case of insufficient payment, a 402 error is returned, prompting the user to adjust the payment amount. This endpoint simulates the physical experience of purchasing a soda, including selection, payment processing, and receiving change.
+      requestBody:
+        $ref: '#/components/requestBodies/PurchaseSodaBody'
+      tags:
+        - user
+  /restock:
+    post:
+      summary: Restock a soda
+      operationId: restockSoda
+      responses:
+        '200':
+          $ref: '#/components/responses/RestockResponse'
+        '404':
+          $ref: '#/components/responses/MessageResponse'
+      description: |
+        Enables vending machine administrators to replenish the stock of a specific soda. By specifying the soda's slot name and the quantity to add, the inventory is updated accordingly. If the added stock exceeds the slot's capacity, the excess is noted for future restocking. This feature is crucial for maintaining a diverse and ample soda selection, ensuring customer satisfaction and operational efficiency.
+      requestBody:
+        $ref: '#/components/requestBodies/RestockRequestBody'
+      tags:
+        - administration
+  /updatePrice:
+    put:
+      summary: Update the price of a soda
+      operationId: updatePrice
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdatePriceResp'
+        '404':
+          $ref: '#/components/responses/MessageResponse'
+      description: |
+        This endpoint allows administrators to adjust the price of a soda, facilitating dynamic pricing strategies based on demand, cost changes, or promotional activities. By providing the slot name and the new price, the system updates the soda's price instantly, impacting all future purchases. Transparency with customers about price changes is recommended to maintain trust and satisfaction.
+      requestBody:
+        $ref: '#/components/requestBodies/UpdatePriceBody'
+      tags:
+        - administration
+  /vending:
+    post:
+      summary: Add New Soda and Vending Slot
+      operationId: post-new
+      responses:
+        '201':
+          $ref: '#/components/responses/MessageResponse'
+        '409':
+          $ref: '#/components/responses/MessageResponse'
+      description: 'Adds a new soda and its corresponding vending slot, allowing administrators to expand the variety of offerings. This operation requires details about the soda, such as name, description, origin story, nutritional information, and initial stock quantity, along with pricing and slot information. It facilitates the introduction of new products, ensuring the vending machine''s offerings remain appealing and diverse. The system is built to allow multiples of the same soda to be in different slots. In this current version the soda and the slot will be named the same deriving from the soda name. '
+      requestBody:
+        $ref: '#/components/requestBodies/NewVendingSlotRequestBody'
+      tags:
+        - administration
+    parameters: []
+    get:
+      summary: Get vending machine slots
+      operationId: get-vending
+      responses:
+        '200':
+          $ref: '#/components/responses/VendingMachineResponse'
+        '404':
+          $ref: '#/components/responses/MessageResponse'
+      description: 'Retrieves a comprehensive list of all vending slots, including contained sodas, their prices, quantities, and other relevant details. This information aids administrators and users in decision-making regarding restocking, pricing adjustments, or purchasing.'
+      parameters: []
+      requestBody:
+        $ref: '#/components/requestBodies/VendingSlotRequestBody'
+      tags:
+        - administration
+    delete:
+      summary: Delete Slot And Return Sodas
+      operationId: delete-vending
+      responses:
+        '200':
+          $ref: '#/components/responses/MessageResponse'
+        '404':
+          $ref: '#/components/responses/MessageResponse'
+      description: |
+        Allows for the removal of a specific soda slot, useful for discontinuing a soda or reorganizing inventory. Details of the removed slot, including the final inventory count, are provided, enabling effective stock level management. This operation is crucial for maintaining an up-to-date and efficient vending machine inventory.
+      requestBody:
+        $ref: '#/components/requestBodies/VendingSlotRequestBody'
+      tags:
+        - administration
+components:
+  schemas:
+    Soda:
+      type: object
+      description: 'Represents a soda available for purchase, including metadata such as name, description, origin story, calories, and volume in ounces. This schema is used to detail the sodas offered by the vending machine, allowing users to make informed choices.'
+      title: Soda
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        originStory:
+          type: string
+          x-stoplight:
+            id: m5snw7f6jbcb2
+        calories:
+          type: integer
+          x-stoplight:
+            id: sv05q4y13cwz2
+        ounces:
+          type: number
+          x-stoplight:
+            id: 8rv5tg7xi19rq
+          format: float
+    VendingSlot:
+      title: VendingSlot
+      x-stoplight:
+        id: i9xhbdj7knc7b
+      type: object
+      description: 'Defines a slot within the vending machine, containing a soda, its cost, maximum quantity, and current stock level. This schema is crucial for managing the inventory and pricing of sodas, ensuring a seamless vending operation.'
+      properties:
+        occupiedSoda:
+          $ref: '#/components/schemas/Soda'
+        cost:
+          type: number
+          x-stoplight:
+            id: h3zc8de51vxss
+          format: float
+        maxQuantity:
+          type: integer
+          x-stoplight:
+            id: 9cifn4xo9hgip
+        quantity:
+          type: integer
+          x-stoplight:
+            id: wg30897155sq7
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    RestockResponse:
+      description: 'Serves as a detailed acknowledgment of a successful restocking operation, indicating the adjustments made to the soda''s inventory within the vending machine. It is aimed at vending machine administrators, providing them with essential feedback on the restocking process, including the updated inventory levels and any excess stock that could not be added due to capacity limitations. This response ensures administrators can effectively manage inventory, plan for future restocking, and maintain optimal soda availability.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              leftover:
+                type: integer
+                x-stoplight:
+                  id: uh8k1y557btm6
+              oldQuantity:
+                type: integer
+                x-stoplight:
+                  id: qwto23b6gzmau
+              newQuantity:
+                type: integer
+                x-stoplight:
+                  id: vxjqjvjuqdjuz
+    ErrorResp:
+      description: 'Provides detailed information about errors encountered during the processing of an API request. It is designed to assist developers and end-users in identifying the cause of an error, facilitating quick and effective troubleshooting. This response structure includes an error code and a human-readable message that describes the nature of the error, offering insights into possible resolutions or actions needed to correct the issue. By clearly communicating error specifics, the ErrorResponse enhances the API''s usability and helps maintain a smooth interaction flow.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                x-stoplight:
+                  id: 5sackvd3offfi
+    AuthTokenResponse:
+      description: 'Authentication successful. Returns a JWT token that must be used in the Authorization header as a Bearer token for subsequent API requests. The token encapsulates user identity and permissions, ensuring secure access to the vending machine''s functionalities. Token validity is limited, requiring re-authentication upon expiry.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                x-stoplight:
+                  id: rpfmze6b6tkyo
+    PurchaseSodaResponse:
+      description: 'The purchase was successful, and the soda has been dispensed. This response includes details of the dispensed soda and any change returned as a result of the transaction. Ensure to collect your soda and change!'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              soda:
+                $ref: '#/components/schemas/Soda'
+              change:
+                type: number
+                x-stoplight:
+                  id: qjk4qs6boei7j
+                format: float
+    UpdatePriceResp:
+      description: 'Serves as a confirmation of a successful price update operation for a specific soda in the vending machine. It is designed to provide administrators with immediate feedback on the result of their request to adjust a soda''s selling price. This response includes the name of the soda slot affected by the price change, the previous price, and the newly set price, offering a transparent overview of the pricing adjustment. This ensures that administrators can verify the update and maintain accurate pricing records for the inventory.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              slotName:
+                type: string
+                x-stoplight:
+                  id: 0bdmsaqgenhyt
+              oldPrice:
+                type: number
+                x-stoplight:
+                  id: azpn17i58pn98
+                format: float
+              newPrice:
+                type: number
+                x-stoplight:
+                  id: a6hd4vxd7pacj
+                format: float
+    VendingMachineResponse:
+      description: 'A response that delivers an exhaustive overview of the vending machine''s inventory, offering insights into the available sodas, their associated vending slots, pricing information, and stock levels. It is structured to facilitate easy access to critical data, enabling users and administrators to make informed decisions regarding purchases, restocking, and price adjustments. This response is particularly useful for inventory management and for clients looking to query the current offerings of the vending machine.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              total:
+                type: integer
+                x-stoplight:
+                  id: mcx1azckg39pn
+              slots:
+                type: array
+                x-stoplight:
+                  id: 3lcf9npwqeh1q
+                items:
+                  $ref: '#/components/schemas/VendingSlot'
+    MessageResponse:
+      description: 'The generic message response is a flexible and universally applicable response structure used throughout the Virtual Soda Vending Machine API to convey textual information to the client. This response can include success messages, error details, warnings, or any other relevant information that needs to be communicated in a straightforward and human-readable format. It is designed to provide clear and concise feedback to the API consumer, aiding in debugging, informing about the results of operations, or guiding the user on subsequent steps.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                x-stoplight:
+                  id: gmmur1kjhdxgs
+          examples:
+            Success Message:
+              value:
+                message: Operation completed successfully.
+            Failure Messsages:
+              value:
+                message: Invalid credentials provided.
+  requestBodies:
+    UpdatePriceBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                x-stoplight:
+                  id: 1uivzrywcq0pb
+              newPrice:
+                type: number
+                x-stoplight:
+                  id: 7r7vjxpwvop9d
+                format: float
+            required:
+              - name
+              - newPrice
+    AuthRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+                x-stoplight:
+                  id: phlnwzag2w1bw
+              password:
+                type: string
+                x-stoplight:
+                  id: 6xg79pziyrakz
+            required:
+              - username
+              - password
+      description: 'Request of Username and Password to get a token from the system. '
+    PurchaseSodaBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                x-stoplight:
+                  id: o1ch8ifjfg945
+              payment:
+                type: number
+                x-stoplight:
+                  id: qs4l0ifz0cikb
+                format: float
+            required:
+              - name
+              - payment
+    RestockRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                x-stoplight:
+                  id: edr0i7tb8g35v
+              quantity:
+                type: integer
+                x-stoplight:
+                  id: 7x4om7alstkjh
+            required:
+              - name
+              - quantity
+    NewVendingSlotRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              slot:
+                $ref: '#/components/schemas/VendingSlot'
+            required:
+              - slot
+      description: 'New vending slot will add a new soda to the system. The system is built in a way that in the future multiple sodas can occupy multiple vending slots. '
+    VendingSlotRequestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                x-stoplight:
+                  id: jh0jfrqr4e76n
+            required:
+              - name
+      description: Standard way of looking up a slot/soda.
+  examples: {}
+security:
+  - BearerAuth: []

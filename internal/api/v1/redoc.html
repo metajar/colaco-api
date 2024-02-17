@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/redoc/bundles/redoc.standalone.js"></script>
+</head>
+<body>
+<!-- The 'spec-url' attribute points to the route where your OpenAPI spec is served -->
+<redoc spec-url='/openapi.yaml'></redoc>
+<script>
+    Redoc.init('/openapi.yaml');
+</script>
+</body>
+</html>

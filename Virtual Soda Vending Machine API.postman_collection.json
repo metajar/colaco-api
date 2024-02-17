@@ -1,0 +1,1023 @@
+{
+	"info": {
+		"_postman_id": "d7b908c5-4142-4840-a96c-b4d245d3b2e5",
+		"name": "Virtual Soda Vending Machine API",
+		"description": "The Virtual Soda Vending Machine API provides a simulated environment for managing and interacting with a virtual soda vending machine. It supports operations such as user authentication, purchasing sodas, restocking inventory, and updating soda prices. This API is designed for use by developers, machine administrators, and end-users looking to explore the functionalities of a virtual vending machine, including inventory management and customer transactions. Get started with our API to enhance your vending machine operations with dynamic pricing, inventory control, and secure user authentication.\n\n\nContact Support:\n Name: Jared Henry\n Email: jhenry6@gmail.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "421860"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"item": [
+						{
+							"name": "Authenticate user and issue JWT",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								},
+								"description": "This endpoint authenticates users via their username and password. Upon successful authentication, it issues a JWT, which must be used as a Bearer Token in subsequent API requests. This token ensures secure access to the vending machine's functionalities. The JWT has an expiry time, after which re-authentication is necessary. Ensure that your credentials are securely stored and not exposed in client-side code. If authentication fails, a 401 error is returned, indicating incorrect credentials or an account issue.\n"
+							},
+							"response": [
+								{
+									"name": "Authentication successful. Returns a JWT token that must be used in the Authorization header as a Bearer token for subsequent API requests. The token encapsulates user identity and permissions, ensuring secure access to the vending machine's functionaliti",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"login"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"token\": \"<string>\"\n}"
+								},
+								{
+									"name": "The generic message response is a flexible and universally applicable response structure used throughout the Virtual Soda Vending Machine API to convey textual information to the client. This response can include success messages, error details, warnings,",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"login"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"<string>\"\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "purchase",
+			"item": [
+				{
+					"name": "Purchase Soda from vending machine",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"<string>\",\n  \"payment\": \"<float>\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/purchase",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"purchase"
+							]
+						},
+						"description": "Allows users to purchase their chosen soda by providing the soda's name and their payment amount. The payment is processed, and if successful, the selected soda is dispensed. If the payment exceeds the soda's cost, the change is returned in the response. In case of insufficient payment, a 402 error is returned, prompting the user to adjust the payment amount. This endpoint simulates the physical experience of purchasing a soda, including selection, payment processing, and receiving change.\n"
+					},
+					"response": [
+						{
+							"name": "The purchase was successful, and the soda has been dispensed. This response includes details of the dispensed soda and any change returned as a result of the transaction. Ensure to collect your soda and change!",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"<string>\",\n  \"payment\": \"<float>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/purchase",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"purchase"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"soda\": {\n    \"name\": \"<string>\",\n    \"description\": \"<string>\",\n    \"originStory\": \"<string>\",\n    \"calories\": \"<integer>\",\n    \"ounces\": \"<float>\"\n  },\n  \"change\": \"<float>\"\n}"
+						},
+						{
+							"name": "The generic message response is a flexible and universally applicable response structure used throughout the Virtual Soda Vending Machine API to convey textual information to the client. This response can include success messages, error details, warnings,",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"<string>\",\n  \"payment\": \"<float>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/purchase",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"purchase"
+									]
+								}
+							},
+							"status": "Payment Required",
+							"code": 402,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "restock",
+			"item": [
+				{
+					"name": "Restock a soda",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"<string>\",\n  \"quantity\": \"<integer>\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/restock",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"restock"
+							]
+						},
+						"description": "Enables vending machine administrators to replenish the stock of a specific soda. By specifying the soda's slot name and the quantity to add, the inventory is updated accordingly. If the added stock exceeds the slot's capacity, the excess is noted for future restocking. This feature is crucial for maintaining a diverse and ample soda selection, ensuring customer satisfaction and operational efficiency.\n"
+					},
+					"response": [
+						{
+							"name": "Serves as a detailed acknowledgment of a successful restocking operation, indicating the adjustments made to the soda's inventory within the vending machine. It is aimed at vending machine administrators, providing them with essential feedback on the rest",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"<string>\",\n  \"quantity\": \"<integer>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/restock",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"restock"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"leftover\": \"<integer>\",\n  \"oldQuantity\": \"<integer>\",\n  \"newQuantity\": \"<integer>\"\n}"
+						},
+						{
+							"name": "The generic message response is a flexible and universally applicable response structure used throughout the Virtual Soda Vending Machine API to convey textual information to the client. This response can include success messages, error details, warnings,",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"<string>\",\n  \"quantity\": \"<integer>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/restock",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"restock"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "updatePrice",
+			"item": [
+				{
+					"name": "Update the price of a soda",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"<string>\",\n  \"newPrice\": \"<float>\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/updatePrice",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"updatePrice"
+							]
+						},
+						"description": "This endpoint allows administrators to adjust the price of a soda, facilitating dynamic pricing strategies based on demand, cost changes, or promotional activities. By providing the slot name and the new price, the system updates the soda's price instantly, impacting all future purchases. Transparency with customers about price changes is recommended to maintain trust and satisfaction.\n"
+					},
+					"response": [
+						{
+							"name": "Serves as a confirmation of a successful price update operation for a specific soda in the vending machine. It is designed to provide administrators with immediate feedback on the result of their request to adjust a soda's selling price. This response inc",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"<string>\",\n  \"newPrice\": \"<float>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/updatePrice",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"updatePrice"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"slotName\": \"<string>\",\n  \"oldPrice\": \"<float>\",\n  \"newPrice\": \"<float>\"\n}"
+						},
+						{
+							"name": "The generic message response is a flexible and universally applicable response structure used throughout the Virtual Soda Vending Machine API to convey textual information to the client. This response can include success messages, error details, warnings,",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"<string>\",\n  \"newPrice\": \"<float>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/updatePrice",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"updatePrice"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "vending",
+			"item": [
+				{
+					"name": "Add New Soda and Vending Slot",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"slot\": {\n    \"occupiedSoda\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"originStory\": \"<string>\",\n      \"calories\": \"<integer>\",\n      \"ounces\": \"<float>\"\n    },\n    \"cost\": \"<float>\",\n    \"maxQuantity\": \"<integer>\",\n    \"quantity\": \"<integer>\"\n  }\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/vending",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"vending"
+							]
+						},
+						"description": "Adds a new soda and its corresponding vending slot, allowing administrators to expand the variety of offerings. This operation requires details about the soda, such as name, description, origin story, nutritional information, and initial stock quantity, along with pricing and slot information. It facilitates the introduction of new products, ensuring the vending machine's offerings remain appealing and diverse. The system is built to allow multiples of the same soda to be in different slots. In this current version the soda and the slot will be named the same deriving from the soda name. "
+					},
+					"response": [
+						{
+							"name": "The generic message response is a flexible and universally applicable response structure used throughout the Virtual Soda Vending Machine API to convey textual information to the client. This response can include success messages, error details, warnings,",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"slot\": {\n    \"occupiedSoda\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"originStory\": \"<string>\",\n      \"calories\": \"<integer>\",\n      \"ounces\": \"<float>\"\n    },\n    \"cost\": \"<float>\",\n    \"maxQuantity\": \"<integer>\",\n    \"quantity\": \"<integer>\"\n  }\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/vending",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vending"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\"\n}"
+						},
+						{
+							"name": "The generic message response is a flexible and universally applicable response structure used throughout the Virtual Soda Vending Machine API to convey textual information to the client. This response can include success messages, error details, warnings,",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"slot\": {\n    \"occupiedSoda\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"originStory\": \"<string>\",\n      \"calories\": \"<integer>\",\n      \"ounces\": \"<float>\"\n    },\n    \"cost\": \"<float>\",\n    \"maxQuantity\": \"<integer>\",\n    \"quantity\": \"<integer>\"\n  }\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/vending",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vending"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get vending machine slots",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"<string>\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/vending",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"vending"
+							]
+						},
+						"description": "Retrieves a comprehensive list of all vending slots, including contained sodas, their prices, quantities, and other relevant details. This information aids administrators and users in decision-making regarding restocking, pricing adjustments, or purchasing."
+					},
+					"response": [
+						{
+							"name": "A response that delivers an exhaustive overview of the vending machine's inventory, offering insights into the available sodas, their associated vending slots, pricing information, and stock levels. It is structured to facilitate easy access to critical d",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/vending",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vending"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"total\": \"<integer>\",\n  \"slots\": [\n    {\n      \"occupiedSoda\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"originStory\": \"<string>\",\n        \"calories\": \"<integer>\",\n        \"ounces\": \"<float>\"\n      },\n      \"cost\": \"<float>\",\n      \"maxQuantity\": \"<integer>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"occupiedSoda\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"originStory\": \"<string>\",\n        \"calories\": \"<integer>\",\n        \"ounces\": \"<float>\"\n      },\n      \"cost\": \"<float>\",\n      \"maxQuantity\": \"<integer>\",\n      \"quantity\": \"<integer>\"\n    }\n  ]\n}"
+						},
+						{
+							"name": "The generic message response is a flexible and universally applicable response structure used throughout the Virtual Soda Vending Machine API to convey textual information to the client. This response can include success messages, error details, warnings,",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/vending",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vending"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Slot And Return Sodas",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"<string>\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/vending",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"vending"
+							]
+						},
+						"description": "Allows for the removal of a specific soda slot, useful for discontinuing a soda or reorganizing inventory. Details of the removed slot, including the final inventory count, are provided, enabling effective stock level management. This operation is crucial for maintaining an up-to-date and efficient vending machine inventory.\n"
+					},
+					"response": [
+						{
+							"name": "The generic message response is a flexible and universally applicable response structure used throughout the Virtual Soda Vending Machine API to convey textual information to the client. This response can include success messages, error details, warnings,",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/vending",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vending"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\"\n}"
+						},
+						{
+							"name": "The generic message response is a flexible and universally applicable response structure used throughout the Virtual Soda Vending Machine API to convey textual information to the client. This response can include success messages, error details, warnings,",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/vending",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vending"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{bearerToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080"
+		}
+	]
+}
